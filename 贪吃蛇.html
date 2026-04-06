@@ -1,0 +1,227 @@
+<!--好的，以下是一个简单的贪吃蛇网页版的html+css+js代码，供您参考：-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>贪吃awa</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color: #222222;
+			color: #FFFFFF;
+			text-align: center;
+			font-family: Arial, sans-serif;
+		}
+
+		canvas {
+			display: block;
+			margin: auto;
+			margin-top: 20px;
+			border: 5px solid #FFFFFF;
+		}
+
+		#score {
+			margin-top: 20px;
+			font-size: 24px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="500" height="500"></canvas>
+	<div id="score">score：0</div>
+
+	<script>
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+
+		var snakeSize = 10;
+		var width = 500;
+		var height = 500;
+
+		var score = 0;
+		var snake;
+		var food;
+
+		var direction = "right";
+
+		var startGame = function() {
+			snake = [];
+			snake.push({x: 0, y: 0});
+			snake.push({x: snakeSize, y: 0});
+			snake.push({x: snakeSize*2, y: 0});
+
+			createFood();
+
+			// 每100毫秒刷新一次游戏画面，即运动速度
+			if(typeof gameLoop != "undefined") clearInterval(gameLoop);
+			gameLoop = setInterval(paint, 100);
+		}
+
+		var paint = function() {
+			// 擦除画布
+			ctx.fillStyle = "#222222";
+			ctx.fillRect(0, 0, width, height);
+
+			// 移动蛇
+			var headX = snake[snake.length-1].x;
+			var headY = snake[snake.length-1].y;
+
+			if (direction == "right") headX += snakeSize;
+			else if (direction == "left") headX -= snakeSize;
+			else if (direction == "up") headY -= snakeSize;
+			else if (direction == "down") headY += snakeSize;
+
+			// 如果蛇头碰到了边界，或者碰到了自己，游戏结束
+			if (headX < 0 || headX >= width || headY < 0 || headY >= height ||
+				checkCollision(headX, headY, snake)) {
+				clearInterval(gameLoop);
+				alert("gameover!垃圾！score：" + score);
+				startGame();
+				return;
+			}
+
+			// 如果吃到了食物，分数加1，并在蛇尾添加一节
+			if (headX == food.x && headY == food.y) {
+				score++;
+				createFood();
+			} else {
+				snake.shift();
+			}
+
+			var newHead = {x: headX, y: headY};
+			snake.push(newHead);
+
+			// 绘制蛇
+			for (var i=0; i<snake.length; i++) {
+				var bodyPart = snake[i];
+				ctx.fillStyle = "#FFFFFF";
+				ctx.fillRect(bodyPart.x, bodyPart.y, snakeSize, snakeSize);
+			}
+
+			// 绘制食物
+			ctx.fillStyle = "red";
+			ctx.fillRect(food.x, food.y, snakeSize, snakeSize);
+
+			// 显示分数
+			document.getElementById("score").innerHTML = "score：" + score;
+		}
+
+		var createFood = function() {
+			food = {
+				x: Math.floor(Math.random()*(width/snakeSize))*snakeSize,
+				y: Math.floor(Math.random()*(height/snakeSize))*snakeSize
+			}
+		}
+
+		var checkCollision = function(x, y, array) {
+			for (var i=0; i<array.length; i++) {
+				if (array[i].x == x && array[i].y == y) 
+					return true;
+			}
+			return false;
+		}
+
+		// 监听键盘输入，改变蛇的运动方向
+		document.addEventListener("keydown", function(event) {
+			if (event.keyCode == 65 && direction != "right")
+				direction = "left";
+			else if (event.keyCode == 87 && direction != "down")
+				direction = "up";
+			else if (event.keyCode == 68 && direction != "left")
+				direction = "right";
+			else if (event.keyCode == 83 && direction != "up")
+				direction = "down";
+		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		startGame();
+	</script>
+</body>
+</html>
+
+
+<!--以上代码可能还有改进的空间，但是已经能够实现文本框的基本功能。您可以在本地搭建一个Web服务器（如Apache、Nginx等），将以上HTML代码存为".html"文件，在本地打开文件即可运行。-->
